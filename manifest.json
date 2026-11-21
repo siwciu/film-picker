@@ -1,8 +1,10 @@
 {
   "name": "FilmPicker · GRKit",
   "short_name": "FilmPicker",
-  "description": "Dobór profili filmowych GRKit dla Ricoh GR",
-  "start_url": "./index.html",
+  "id": "./",
+  "description": "Dobierz filmlook GRKit do tematu i światła.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0d0d0f",
   "theme_color": "#0d0d0f",
