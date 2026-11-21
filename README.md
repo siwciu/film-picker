@@ -27,3 +27,36 @@ Logo w nagłówku i ikona PWA korzystają z `icon.png`.
 Katalog w `films.js` jest przypięty do GRKit v1.6.4 i zawiera 22 profile kolorowe oraz 8 czarno-białych. `app.js` punktuje dopasowanie na podstawie pięciu odpowiedzi i po każdym kroku pokazuje aktualne typy; wynik zawsze zawiera trzy propozycje.
 
 Filmlooki są dopasowaniami symulacji LUT, nie dokładnymi odpowiednikami filmów. Efekty GRKit nie dodają ziarna ani halacji. [Oficjalne informacje GRKit](https://github.com/ahonn/grkit/blob/v1.6.4/effects/NOTICE.md).
+
+---
+
+## English
+
+FilmPicker is a lightweight web app/PWA that helps you choose one of 30 GRKit v1.6.4 film looks based on your subject, lighting, weather, and desired mood. It runs without an application server; recommendations are ranked locally in your browser.
+
+Use the language menu in the top-right corner to switch between Polish and English. Your selection is saved in the browser.
+
+### Run locally
+
+Serve the project folder over HTTP, for example:
+
+```powershell
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000`. The service worker and PWA installation require a secure context: HTTPS or `localhost`.
+
+### Publish on GitHub Pages
+
+1. Push the project files to a GitHub repository.
+2. In the repository settings, open **Pages** and select the branch and folder containing `index.html`.
+3. Open the HTTPS site in Safari on your iPhone and choose **Share → Add to Home Screen**.
+4. Open the app online once; the catalog and questionnaire will then also be available offline.
+
+All asset paths are relative, so the app also works from a GitHub Pages repository path. The header logo and PWA icon use `icon.png`.
+
+### Catalog and recommendations
+
+The catalog in `films.js` is based on GRKit v1.6.4 and contains 22 color profiles and 8 black-and-white profiles. `app.js` scores matches based on five answers and refreshes the current picks after each step; the final result always contains three suggestions.
+
+Film looks are LUT-simulation matches, not exact film equivalents. GRKit effects do not add grain or halation. See the [official GRKit information](https://github.com/ahonn/grkit/blob/v1.6.4/effects/NOTICE.md).

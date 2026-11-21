@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="FilmPicker">
-  <meta name="description" content="Dobierz filmlook GRKit do tematu i światła.">
+  <meta name="description" content="Dobierz filmlook GRKit do tematu i światła." id="meta-description">
   <title>FilmPicker · GRKit</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" href="./icon.png" type="image/png">
@@ -45,6 +45,12 @@
     .brand-mark { display: block; width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px; object-fit: cover; }
     .version { display: block; color: var(--muted); font-size: 10px; font-weight: 650; letter-spacing: .1em; }
     .text-button { border: 1px solid var(--line); background: rgba(28,28,34,.8); color: var(--muted); padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 650; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; }
+    .language-picker { position: relative; }
+    .language-select { appearance: none; border: 1px solid var(--line); background: rgba(28,28,34,.8); color: var(--text); padding: 9px 28px 9px 11px; border-radius: 12px; font-size: 13px; font-weight: 700; }
+    .language-picker::after { content: "⌄"; position: absolute; right: 10px; top: 50%; color: var(--muted); transform: translateY(-55%); pointer-events: none; }
+    .language-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .text-button:active, .option:active, .action:active { transform: scale(.985); }
     .progress-wrap { margin-bottom: 27px; }
     .progress-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-bottom: 9px; }
@@ -118,7 +124,16 @@
   <div class="app">
     <header class="topbar">
       <div class="brand"><img class="brand-mark" src="./icon.png" alt=""><span>FilmPicker<span class="version">GRKIT · v1.6.4</span></span></div>
-      <button class="text-button" id="catalog-toggle" type="button" aria-expanded="false">Katalog · 30</button>
+      <div class="topbar-actions">
+        <button class="text-button" id="catalog-toggle" type="button" aria-expanded="false">Katalog · 30</button>
+        <label class="language-picker">
+          <span class="visually-hidden" id="language-label">Język</span>
+          <select class="language-select" id="language-select" aria-labelledby="language-label">
+            <option value="pl">PL</option>
+            <option value="en">EN</option>
+          </select>
+        </label>
+      </div>
     </header>
 
     <main id="wizard-view">
@@ -130,13 +145,13 @@
     </main>
 
     <main id="catalog-view" hidden>
-      <p class="eyebrow">Przewodnik po efektach</p>
-      <h1>Wszystkie filmlooki</h1>
-      <p class="catalog-intro">30 wbudowanych efektów GRKit v1.6.4. Wybierz kategorię pytań, by znaleźć styl dla swojej sceny.</p>
+      <p class="eyebrow" id="catalog-eyebrow">Przewodnik po efektach</p>
+      <h1 id="catalog-title">Wszystkie filmlooki</h1>
+      <p class="catalog-intro" id="catalog-intro">30 wbudowanych efektów GRKit v1.6.4. Wybierz kategorię pytań, by znaleźć styl dla swojej sceny.</p>
       <div class="catalog-list" id="catalog-list"></div>
-      <p class="source-note">Efekty GRKit są dopasowaniami symulacji LUT, a nie dokładnymi odpowiednikami filmu. Nie dodają ziarna ani halacji. <a href="https://grkit.app/install/#effects-label" target="_blank" rel="noreferrer">Źródło i podglądy GRKit ↗</a></p>
+      <p class="source-note"><span id="catalog-source-copy">Efekty GRKit są dopasowaniami symulacji LUT, a nie dokładnymi odpowiednikami filmu. Nie dodają ziarna ani halacji.</span> <a id="catalog-source-link" href="https://grkit.app/install/#effects-label" target="_blank" rel="noreferrer">Źródło i podglądy GRKit ↗</a></p>
     </main>
-    <footer class="footnote">Dobór jest inspiracją — sprawdź podgląd w aparacie.</footer>
+    <footer class="footnote" id="footnote">Dobór jest inspiracją — sprawdź podgląd w aparacie.</footer>
   </div>
   <script src="./films.js" defer></script>
   <script src="./app.js" defer></script>

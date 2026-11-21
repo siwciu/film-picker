@@ -1,4 +1,4 @@
-const CACHE_NAME = "filmpicker-v3";
+const CACHE_NAME = "filmpicker-v4";
 const APP_ASSETS = [
   "./",
   "./index.html",
