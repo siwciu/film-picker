@@ -98,6 +98,8 @@
     .action.secondary { background: var(--surface); color: var(--text); border: 1px solid var(--line); }
     .action:disabled { opacity: .42; }
     .footnote { margin: 22px 0 0; color: #878790; font-size: 11px; text-align: center; }
+    .footnote a { color: var(--accent); text-decoration: none; }
+    .footnote a:hover, .footnote a:focus-visible { text-decoration: underline; }
     .results { display: grid; gap: 11px; margin-top: 18px; }
     .result-card { padding: 17px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
     .result-card.best { border-color: var(--accent); background: linear-gradient(145deg, rgba(245,158,11,.11), var(--surface) 60%); }
@@ -169,7 +171,7 @@
       <div class="catalog-list" id="catalog-list"></div>
       <p class="source-note"><span id="catalog-source-copy">Efekty GRKit są dopasowaniami symulacji LUT, a nie dokładnymi odpowiednikami filmu. Nie dodają ziarna ani halacji.</span> <a id="catalog-source-link" href="https://grkit.app/install/#effects-label" target="_blank" rel="noreferrer">Źródło i podglądy GRKit ↗</a></p>
     </main>
-    <footer class="footnote" id="footnote">Dobór jest inspiracją — sprawdź podgląd w aparacie.</footer>
+    <footer class="footnote" id="footnote"><span id="footnote-copy">Filmlooki są dostępne w GRKit — świetnym projekcie ahonn dla aparatów RICOH GR.</span> <a id="footnote-link" href="https://grkit.app/" target="_blank" rel="noreferrer">Poznaj GRKit ↗</a></footer>
   </div>
   <script src="./films.js" defer></script>
   <script src="./app.js" defer></script>

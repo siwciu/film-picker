@@ -35,7 +35,9 @@
       effectsGuide: "Przewodnik po efektach", allLooks: "Wszystkie filmlooki",
       catalogIntro: "30 wbudowanych efektów GRKit v1.6.4. Wybierz kategorię pytań, by znaleźć styl dla swojej sceny.",
       catalogSource: "Efekty GRKit są dopasowaniami symulacji LUT, a nie dokładnymi odpowiednikami filmu. Nie dodają ziarna ani halacji.",
-      sourceLink: "Źródło i podglądy GRKit ↗", footnote: "Dobór jest inspiracją — sprawdź podgląd w aparacie.",
+      sourceLink: "Źródło i podglądy GRKit ↗",
+      footnote: "Filmlooki są dostępne w GRKit — świetnym projekcie ahonn dla aparatów RICOH GR.",
+      footnoteLink: "Poznaj GRKit ↗",
       colorGroup: "Kolor", bwGroup: "Czerń i biel", language: "Język",
       description: "Dobierz filmlook GRKit do tematu i światła.",
       checkLooks: "Sprawdź nowości", checkingLooks: "Sprawdzam filmlooki GRKit…",
@@ -64,7 +66,9 @@
       effectsGuide: "Film look guide", allLooks: "All film looks",
       catalogIntro: "30 built-in GRKit v1.6.4 effects. Answer the questions to find a look for your scene.",
       catalogSource: "GRKit effects are LUT-simulation matches, not exact film equivalents. They do not add grain or halation.",
-      sourceLink: "GRKit source and previews ↗", footnote: "Use these suggestions as inspiration — check the preview in your camera.",
+      sourceLink: "GRKit source and previews ↗",
+      footnote: "The film looks are available in GRKit, a great project by ahonn for RICOH GR cameras.",
+      footnoteLink: "Discover GRKit ↗",
       colorGroup: "Color", bwGroup: "Black and white", language: "Language",
       description: "Find a GRKit film look for your subject and lighting.",
       checkLooks: "Check for new looks", checkingLooks: "Checking GRKit film looks…",
@@ -226,7 +230,8 @@
     document.getElementById("catalog-intro").textContent = text.catalogIntro;
     document.getElementById("catalog-source-copy").textContent = text.catalogSource;
     document.getElementById("catalog-source-link").textContent = text.sourceLink;
-    document.getElementById("footnote").textContent = text.footnote;
+    document.getElementById("footnote-copy").textContent = text.footnote;
+    document.getElementById("footnote-link").textContent = text.footnoteLink;
     catalogToggle.textContent = catalogOpen ? text.returnToQuestions : `${text.catalog} · ${FILMS.length}`;
     renderUpdateStatus();
   }
