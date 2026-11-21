@@ -1,11 +1,11 @@
-const CACHE_NAME = "filmpicker-v5";
+const CACHE_NAME = "filmpicker-v6";
 const APP_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon.png",
   "./films.js",
-  "./app.js"
+  "./app.js?v=6"
 ];
 
 self.addEventListener("install", (event) => {
