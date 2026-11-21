@@ -3,26 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#111311">
+  <meta name="theme-color" content="#141418">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="FilmPicker">
   <meta name="description" content="Dobierz filmlook GRKit do tematu i światła.">
   <title>FilmPicker · GRKit</title>
   <link rel="manifest" href="./manifest.json">
-  <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" href="./icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icon.png">
   <style>
     :root {
       color-scheme: dark;
-      --bg: #111311;
-      --surface: #1b1e1b;
-      --surface-raised: #222622;
-      --line: #343a34;
-      --text: #f3f2eb;
-      --muted: #a7ada4;
-      --accent: #c5ee75;
-      --accent-dark: #202a12;
+      --bg: #141418;
+      --surface: #1c1c22;
+      --surface-raised: #26262d;
+      --line: #2c2c35;
+      --text: #f4f4f6;
+      --muted: #aaaab2;
+      --accent: #f59e0b;
+      --accent-dark: #362916;
       --radius: 18px;
     }
 
@@ -32,7 +32,7 @@
       min-height: 100dvh;
       padding: max(14px, env(safe-area-inset-top)) 18px max(16px, env(safe-area-inset-bottom));
       background:
-        radial-gradient(ellipse at 85% -10%, rgba(197, 238, 117, .09), transparent 38%),
+        radial-gradient(ellipse at 85% -10%, rgba(245, 158, 11, .09), transparent 38%),
         var(--bg);
       color: var(--text);
       font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -42,14 +42,14 @@
     .app { width: min(100%, 560px); min-height: calc(100dvh - 30px); margin: 0 auto; display: flex; flex-direction: column; }
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0 22px; }
     .brand { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 780; letter-spacing: -.5px; }
-    .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; background: var(--accent); color: #141810; font-size: 17px; }
+    .brand-mark { display: block; width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px; object-fit: cover; }
     .version { display: block; color: var(--muted); font-size: 10px; font-weight: 650; letter-spacing: .1em; }
-    .text-button { border: 1px solid var(--line); background: rgba(27,30,27,.8); color: var(--muted); padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 650; }
+    .text-button { border: 1px solid var(--line); background: rgba(28,28,34,.8); color: var(--muted); padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 650; }
     .text-button:active, .option:active, .action:active { transform: scale(.985); }
     .progress-wrap { margin-bottom: 27px; }
     .progress-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-bottom: 9px; }
     .progress { display: flex; gap: 6px; }
-    .progress span { height: 4px; flex: 1; background: #2a2e2a; border-radius: 10px; }
+    .progress span { height: 4px; flex: 1; background: #26262d; border-radius: 10px; }
     .progress span.active { background: var(--accent); }
     .eyebrow { color: var(--accent); font-size: 11px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 8px; }
     h1 { margin: 0; font-size: clamp(27px, 7vw, 36px); line-height: 1.08; letter-spacing: -.045em; }
@@ -68,32 +68,32 @@
       border: 1px solid var(--line);
       border-radius: 15px;
       color: var(--text);
-      background: rgba(27,30,27,.86);
+      background: rgba(28,28,34,.86);
       transition: transform .12s, border-color .15s, background .15s;
     }
     .option:hover, .option:focus-visible { border-color: var(--accent); background: var(--surface-raised); outline: none; }
     .option-icon { width: 31px; flex: 0 0 31px; text-align: center; font-size: 23px; }
     .option-label { font-size: 14px; font-weight: 680; line-height: 1.25; }
     .option-note { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 450; }
-    .live-picks { margin-top: 17px; padding: 14px; border: 1px solid rgba(197,238,117,.25); border-radius: 15px; background: rgba(197,238,117,.055); }
+    .live-picks { margin-top: 17px; padding: 14px; border: 1px solid rgba(245,158,11,.25); border-radius: 15px; background: rgba(245,158,11,.055); }
     .live-label { color: var(--muted); font-size: 11px; font-weight: 650; }
     .live-hint { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
     .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
-    .chip { display: inline-flex; align-items: center; padding: 6px 9px; border-radius: 9px; background: #2a3024; color: var(--text); font-size: 12px; font-weight: 630; }
+    .chip { display: inline-flex; align-items: center; padding: 6px 9px; border-radius: 9px; background: var(--accent-dark); color: var(--text); font-size: 12px; font-weight: 630; }
     .nav-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: auto; padding-top: 23px; }
     .action { min-height: 49px; padding: 12px 17px; border: 0; border-radius: 14px; font-weight: 740; transition: transform .12s; }
     .action.primary { flex: 1; background: var(--accent); color: #171b11; }
     .action.secondary { background: var(--surface); color: var(--text); border: 1px solid var(--line); }
     .action:disabled { opacity: .42; }
-    .footnote { margin: 22px 0 0; color: #858c82; font-size: 11px; text-align: center; }
+    .footnote { margin: 22px 0 0; color: #878790; font-size: 11px; text-align: center; }
     .results { display: grid; gap: 11px; margin-top: 18px; }
     .result-card { padding: 17px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
-    .result-card.best { border-color: var(--accent); background: linear-gradient(145deg, rgba(197,238,117,.11), var(--surface) 60%); }
+    .result-card.best { border-color: var(--accent); background: linear-gradient(145deg, rgba(245,158,11,.11), var(--surface) 60%); }
     .result-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
     .rank { color: var(--accent); font-size: 11px; font-weight: 780; letter-spacing: .08em; text-transform: uppercase; }
     .film-name { margin: 3px 0 2px; font-size: 21px; line-height: 1.2; letter-spacing: -.03em; }
     .film-kind { color: var(--muted); font-size: 11px; }
-    .film-desc { margin: 11px 0 0; color: #d3d5ce; font-size: 13px; }
+    .film-desc { margin: 11px 0 0; color: #dedee2; font-size: 13px; }
     .match-reason { margin: 9px 0 0; color: var(--accent); font-size: 11px; }
     .catalog-intro { margin: 9px 0 18px; color: var(--muted); font-size: 14px; }
     .catalog-list { display: grid; gap: 9px; padding-bottom: 20px; }
@@ -102,7 +102,7 @@
     .catalog-name { font-size: 15px; font-weight: 720; }
     .catalog-type { color: var(--accent); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
     .catalog-card p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
-    .source-note { margin: 20px 0 0; padding: 13px; border-radius: 13px; background: #1b1e1b; color: var(--muted); font-size: 11px; }
+    .source-note { margin: 20px 0 0; padding: 13px; border-radius: 13px; background: var(--surface); color: var(--muted); font-size: 11px; }
     .source-note a { color: var(--accent); }
     [hidden] { display: none !important; }
 
@@ -117,7 +117,7 @@
 <body>
   <div class="app">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">◉</span><span>FilmPicker<span class="version">GRKIT · v1.6.4</span></span></div>
+      <div class="brand"><img class="brand-mark" src="./icon.png" alt=""><span>FilmPicker<span class="version">GRKIT · v1.6.4</span></span></div>
       <button class="text-button" id="catalog-toggle" type="button" aria-expanded="false">Katalog · 30</button>
     </header>
 

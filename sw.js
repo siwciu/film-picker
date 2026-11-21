@@ -1,9 +1,9 @@
-const CACHE_NAME = "filmpicker-v2";
+const CACHE_NAME = "filmpicker-v3";
 const APP_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./icon.svg",
+  "./icon.png",
   "./films.js",
   "./app.js"
 ];

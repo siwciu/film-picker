@@ -20,6 +20,7 @@ Następnie otwórz `http://localhost:8000`. Service worker i instalacja PWA wyma
 4. Uruchom aplikację raz online; potem katalog i ankieta są dostępne także offline.
 
 Wszystkie odwołania do zasobów są względne, więc aplikacja działa również pod ścieżką repozytorium GitHub Pages.
+Logo w nagłówku i ikona PWA korzystają z `icon.png`.
 
 ## Katalog i rekomendacje
 
