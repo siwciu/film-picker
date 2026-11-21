@@ -43,7 +43,13 @@
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0 22px; }
     .brand { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 780; letter-spacing: -.5px; }
     .brand-mark { display: block; width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px; object-fit: cover; }
+    .brand-copy { display: block; }
     .version { display: block; color: var(--muted); font-size: 10px; font-weight: 650; letter-spacing: .1em; }
+    .update-check { display: flex; align-items: center; flex-wrap: wrap; gap: 3px 7px; margin-top: 2px; font-size: 10px; font-weight: 550; letter-spacing: 0; }
+    .update-button { padding: 0; border: 0; background: none; color: #878790; font: inherit; text-align: left; text-decoration: underline; text-underline-offset: 2px; }
+    .update-button:hover, .update-button:focus-visible, .update-link { color: var(--accent); }
+    .update-button:disabled { opacity: .7; }
+    .update-link { text-decoration: none; }
     .text-button { border: 1px solid var(--line); background: rgba(28,28,34,.8); color: var(--muted); padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 650; }
     .topbar-actions { display: flex; align-items: center; gap: 8px; }
     .language-picker { position: relative; }
@@ -114,6 +120,8 @@
 
     @media (max-width: 380px) {
       body { padding-left: 14px; padding-right: 14px; }
+      .topbar { gap: 8px; }
+      .topbar-actions { gap: 6px; }
       .options.grid { grid-template-columns: 1fr; }
       .option { min-height: 57px; }
     }
@@ -123,7 +131,17 @@
 <body>
   <div class="app">
     <header class="topbar">
-      <div class="brand"><img class="brand-mark" src="./icon.png" alt=""><span>FilmPicker<span class="version">GRKIT · v1.6.4</span></span></div>
+      <div class="brand">
+        <img class="brand-mark" src="./icon.png" alt="">
+        <span class="brand-copy">
+          <span>FilmPicker</span>
+          <span class="version">GRKIT · v1.6.4</span>
+          <span class="update-check">
+            <button class="update-button" id="check-updates" type="button">Sprawdź nowości</button>
+            <span id="update-status" role="status" aria-live="polite"></span>
+          </span>
+        </span>
+      </div>
       <div class="topbar-actions">
         <button class="text-button" id="catalog-toggle" type="button" aria-expanded="false">Katalog · 30</button>
         <label class="language-picker">

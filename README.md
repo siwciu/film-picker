@@ -2,6 +2,8 @@
 
 Lekka aplikacja webowa/PWA pomagająca dobrać jeden z 30 filmlooków GRKit v1.6.4 do tematu zdjęcia, światła, pogody i pożądanego nastroju. Działa bez serwera aplikacyjnego; cały ranking liczy się lokalnie w przeglądarce.
 
+Przy otwarciu aplikacja sprawdza dostępność nowych filmlooków (maksymalnie raz na dobę); można też uruchomić sprawdzanie przyciskiem pod logo. Porównywane są stabilne identyfikatory efektów w najnowszym wydaniu GRKit, więc sama zmiana numeru wersji nie jest zgłaszana jako nowość. Sprawdzanie wymaga połączenia z internetem.
+
 ## Uruchomienie lokalne
 
 Otwórz folder przez lokalny serwer HTTP, np.:
@@ -35,6 +37,8 @@ Filmlooki są dopasowaniami symulacji LUT, nie dokładnymi odpowiednikami filmó
 FilmPicker is a lightweight web app/PWA that helps you choose one of 30 GRKit v1.6.4 film looks based on your subject, lighting, weather, and desired mood. It runs without an application server; recommendations are ranked locally in your browser.
 
 Use the language menu in the top-right corner to switch between Polish and English. Your selection is saved in the browser.
+
+On launch, the app checks for new film looks at most once every 24 hours. You can also start a check with the button below the logo. It compares stable effect IDs in the latest GRKit release, so a version-number change alone is not reported as a new look. An internet connection is required.
 
 ### Run locally
 

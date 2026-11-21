@@ -9,6 +9,8 @@
   const catalogList = document.getElementById("catalog-list");
   const catalogToggle = document.getElementById("catalog-toggle");
   const languageSelect = document.getElementById("language-select");
+  const checkUpdatesButton = document.getElementById("check-updates");
+  const updateStatus = document.getElementById("update-status");
   const metaDescription = document.getElementById("meta-description");
 
   const copy = {
@@ -35,7 +37,11 @@
       catalogSource: "Efekty GRKit są dopasowaniami symulacji LUT, a nie dokładnymi odpowiednikami filmu. Nie dodają ziarna ani halacji.",
       sourceLink: "Źródło i podglądy GRKit ↗", footnote: "Dobór jest inspiracją — sprawdź podgląd w aparacie.",
       colorGroup: "Kolor", bwGroup: "Czerń i biel", language: "Język",
-      description: "Dobierz filmlook GRKit do tematu i światła."
+      description: "Dobierz filmlook GRKit do tematu i światła.",
+      checkLooks: "Sprawdź nowości", checkingLooks: "Sprawdzam filmlooki GRKit…",
+      noNewLooks: "Brak nowych filmlooków",
+      newLooks: (count) => count === 1 ? "Nowy filmlook GRKit" : `Nowe filmlooki GRKit (${count})`,
+      updateCheckFailed: "Nie udało się sprawdzić nowości."
     },
     en: {
       catalog: "Catalog", returnToQuestions: "Back to questions", progress: "Progress",
@@ -60,7 +66,11 @@
       catalogSource: "GRKit effects are LUT-simulation matches, not exact film equivalents. They do not add grain or halation.",
       sourceLink: "GRKit source and previews ↗", footnote: "Use these suggestions as inspiration — check the preview in your camera.",
       colorGroup: "Color", bwGroup: "Black and white", language: "Language",
-      description: "Find a GRKit film look for your subject and lighting."
+      description: "Find a GRKit film look for your subject and lighting.",
+      checkLooks: "Check for new looks", checkingLooks: "Checking GRKit film looks…",
+      noNewLooks: "No new film looks found.",
+      newLooks: (count) => count === 1 ? "New GRKit film look" : `${count} new GRKit film looks`,
+      updateCheckFailed: "Could not check for new looks."
     }
   };
 
@@ -146,10 +156,30 @@
     "xp2-super": "Softer, smooth tonal range for portraits and everyday documentary photography."
   };
 
+  const GRKIT_API = "https://api.github.com/repos/ahonn/GRKit";
+  const UPDATE_CHECK_INTERVAL = 24 * 60 * 60 * 1000;
+  const UPDATE_CHECKED_AT_KEY = "film-picker-look-check-at";
+  const UPDATE_STATUS_KEY = "film-picker-look-check-status";
+  const UPDATE_IDS_KEY = "film-picker-new-look-ids";
+  // Stable effect IDs present in the app's GRKit v1.6.4 catalog.
+  const KNOWN_FILMLOOK_IDS = [
+    "aerocolor-iv-v1", "astia-100f-v1", "c200-premier-v1", "delta-100-v1",
+    "double-x-5222-mono-v1", "ektachrome-e100-v1", "ektar-100-edge-v1",
+    "eterna-500t-3523xd-v1", "fuji-160c-v1", "gold-200-premier-v1",
+    "hp5-plus-400-mono-v1", "instax-v1", "kodachrome-64-v1",
+    "neopan-acros-100-v1", "portra-160-vc-v1", "portra-400-endura-v1",
+    "portra-800-push2-v1", "precisa-100-v1", "pro-400h-crystal-v1",
+    "provia-100f-v1", "red-filter-mono-v1", "t-max-400-v1",
+    "trix-400-mono-v1", "ultramax-400-ultra-v1", "velvia-100-v1",
+    "vision3-250d-2383-v1", "vision3-500t-supra-v1", "vista-200-v1",
+    "xp2-super-v1", "xtra-400-crystal-v1"
+  ];
+
   const answers = {};
   let currentStep = 0;
   let catalogOpen = false;
   let language = "pl";
+  let updateState = { status: "idle", newIds: [] };
   const weights = { subjects: 5, light: 4, weather: 3, palette: 5 };
 
   try {
@@ -198,6 +228,120 @@
     document.getElementById("catalog-source-link").textContent = text.sourceLink;
     document.getElementById("footnote").textContent = text.footnote;
     catalogToggle.textContent = catalogOpen ? text.returnToQuestions : `${text.catalog} · ${FILMS.length}`;
+    renderUpdateStatus();
+  }
+
+  function renderUpdateStatus() {
+    checkUpdatesButton.textContent = t("checkLooks");
+    checkUpdatesButton.disabled = updateState.status === "checking";
+    updateStatus.replaceChildren();
+
+    if (updateState.status === "checking") {
+      updateStatus.textContent = t("checkingLooks");
+    } else if (updateState.status === "none") {
+      updateStatus.textContent = t("noNewLooks");
+    } else if (updateState.status === "error") {
+      updateStatus.textContent = t("updateCheckFailed");
+    } else if (updateState.status === "new") {
+      const link = make("a", "update-link", t("newLooks", updateState.newIds.length));
+      link.href = "https://grkit.app/install/#effects-label";
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      updateStatus.append(link);
+    }
+  }
+
+  function readUpdateCache() {
+    try {
+      const checkedAtValue = localStorage.getItem(UPDATE_CHECKED_AT_KEY);
+      const status = localStorage.getItem(UPDATE_STATUS_KEY);
+      const idsValue = localStorage.getItem(UPDATE_IDS_KEY);
+      if (!checkedAtValue || !idsValue || !["none", "new", "error"].includes(status)) return null;
+
+      const checkedAt = Number(checkedAtValue);
+      const ids = JSON.parse(idsValue);
+      if (!Number.isFinite(checkedAt) || !Array.isArray(ids) || ids.some((id) => typeof id !== "string")) {
+        return null;
+      }
+      return { checkedAt, status, ids };
+    } catch (error) {
+      console.error("Nie udało się odczytać zapisanego wyniku sprawdzania filmlooków.", error);
+      return null;
+    }
+  }
+
+  function saveUpdateCache(checkedAt, status, ids) {
+    try {
+      localStorage.setItem(UPDATE_CHECKED_AT_KEY, String(checkedAt));
+      localStorage.setItem(UPDATE_STATUS_KEY, status);
+      localStorage.setItem(UPDATE_IDS_KEY, JSON.stringify(ids));
+    } catch (error) {
+      console.error("Nie udało się zapisać wyniku sprawdzania filmlooków.", error);
+    }
+  }
+
+  async function fetchLatestFilmlookIds() {
+    const requestOptions = {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+      },
+      cache: "no-store"
+    };
+    const releaseResponse = await fetch(`${GRKIT_API}/releases/latest`, requestOptions);
+    if (!releaseResponse.ok) throw new Error(`GRKit release check returned HTTP ${releaseResponse.status}.`);
+    const release = await releaseResponse.json();
+    if (typeof release.tag_name !== "string" || !release.tag_name) {
+      throw new Error("The latest GRKit release has no tag name.");
+    }
+
+    const treeResponse = await fetch(
+      `${GRKIT_API}/git/trees/${encodeURIComponent(release.tag_name)}?recursive=1`,
+      requestOptions
+    );
+    if (!treeResponse.ok) throw new Error(`GRKit effect check returned HTTP ${treeResponse.status}.`);
+    const tree = await treeResponse.json();
+    if (!Array.isArray(tree.tree) || tree.truncated) {
+      throw new Error("The GRKit effect tree is missing or incomplete.");
+    }
+
+    const effectIds = tree.tree
+      .filter((entry) => typeof entry.path === "string")
+      .map((entry) => {
+        const match = /^effects\/([^/]+)\/effect\.json$/.exec(entry.path);
+        return match ? match[1] : null;
+      })
+      .filter(Boolean);
+    if (effectIds.length === 0) throw new Error("The latest GRKit release contains no effect definitions.");
+    return effectIds;
+  }
+
+  async function checkForNewFilmlooks(manual = false) {
+    if (!manual) {
+      const cached = readUpdateCache();
+      const cacheAge = cached ? Date.now() - cached.checkedAt : -1;
+      if (cached && cacheAge >= 0 && cacheAge < UPDATE_CHECK_INTERVAL) {
+        updateState = { status: cached.status, newIds: cached.ids };
+        renderUpdateStatus();
+        return;
+      }
+    }
+
+    updateState = { status: "checking", newIds: [] };
+    renderUpdateStatus();
+    try {
+      const latestIds = await fetchLatestFilmlookIds();
+      const knownIds = new Set(KNOWN_FILMLOOK_IDS);
+      const newIds = latestIds.filter((id) => !knownIds.has(id));
+      const status = newIds.length ? "new" : "none";
+      saveUpdateCache(Date.now(), status, newIds);
+      updateState = { status, newIds };
+    } catch (error) {
+      console.error("Nie udało się sprawdzić nowych filmlooków GRKit.", error);
+      saveUpdateCache(Date.now(), "error", []);
+      updateState = { status: "error", newIds: [] };
+    }
+    renderUpdateStatus();
   }
 
   function getEligibleFilms() {
@@ -430,8 +574,20 @@
     else render();
   });
 
+  checkUpdatesButton.addEventListener("click", () => checkForNewFilmlooks(true));
+
+  const cachedUpdates = readUpdateCache();
+  const cachedAge = cachedUpdates ? Date.now() - cachedUpdates.checkedAt : -1;
+  if (cachedUpdates && cachedAge >= 0 && cachedAge < UPDATE_CHECK_INTERVAL) {
+    updateState = {
+      status: cachedUpdates.status,
+      newIds: cachedUpdates.ids
+    };
+  }
+
   applyLanguage();
   render();
+  if (updateState.status === "idle") checkForNewFilmlooks();
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch((error) => {
